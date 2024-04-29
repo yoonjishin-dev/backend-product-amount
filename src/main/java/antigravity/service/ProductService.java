@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -22,6 +23,10 @@ public class ProductService {
 
     public ProductAmountResponse getProductAmount(ProductInfoRequest request) {
         System.out.println("상품 가격 추출 로직을 완성 시켜주세요.");
+
+        if (!Objects.nonNull(request) || request.getCouponIds().length == 0 || request.getProductId() == 0) {
+            throw new NullPointerException();
+        }
 
         Product product = productRepository.findById(request.getProductId()).orElse(new Product());
         List<PromotionProducts> promotionProducts = promotionProductsRepository.findAllByProduct(product);
