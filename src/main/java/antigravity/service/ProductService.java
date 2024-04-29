@@ -24,7 +24,7 @@ public class ProductService {
     public ProductAmountResponse getProductAmount(ProductInfoRequest request) {
         System.out.println("상품 가격 추출 로직을 완성 시켜주세요.");
 
-        if (!Objects.nonNull(request) || request.getCouponIds().length == 0 || request.getProductId() == 0) {
+        if (!Objects.nonNull(request) || !Objects.nonNull(request.getCouponIds()) || !Objects.nonNull(productRepository.findById(request.getProductId()))) {
             throw new NullPointerException();
         }
 
@@ -35,11 +35,11 @@ public class ProductService {
         double codeResult = 0;
         for (PromotionProducts p : promotionProducts) {
             Promotion promotion = p.getPromotion();
-            if (promotion.getPromotion_type().equalsIgnoreCase("COUPON")) {
-                couponResult += product.getPrice() - (product.getPrice() - promotion.getDiscount_value());
-            }
-            if (promotion.getPromotion_type().equalsIgnoreCase("CODE")) {
-                codeResult += product.getPrice() - (product.getPrice() * (1 - (promotion.getDiscount_value() / 100.0)));
+            switch (promotion.getPromotion_type()) {
+                case COUPON ->
+                        couponResult += product.getPrice() - (product.getPrice() - promotion.getDiscount_value());
+                case CODE ->
+                        codeResult += product.getPrice() - (product.getPrice() * (1 - (promotion.getDiscount_value() / 100.0)));
             }
         }
 
