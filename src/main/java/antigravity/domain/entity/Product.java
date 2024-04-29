@@ -1,12 +1,23 @@
 package antigravity.domain.entity;
 
-import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 
-@Data
-@Builder
+import javax.persistence.*;
+import java.util.List;
+
+@Getter
+@Entity
 public class Product {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     private String name;
+
     private int price;
+
+    @OneToMany(mappedBy = "product")
+    private List<PromotionProducts> promotionProducts;
 }
