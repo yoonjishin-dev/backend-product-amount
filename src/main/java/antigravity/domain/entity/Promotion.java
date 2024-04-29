@@ -1,5 +1,6 @@
 package antigravity.domain.entity;
 
+import antigravity.domain.entity.enumeration.DiscountType;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -14,7 +15,8 @@ public class Promotion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private String promotion_type; //쿠폰 타입 (쿠폰, 코드)
+    @Enumerated(value = EnumType.STRING)
+    private DiscountType promotion_type; //쿠폰 타입 (쿠폰, 코드)
 
     private String name;
 
